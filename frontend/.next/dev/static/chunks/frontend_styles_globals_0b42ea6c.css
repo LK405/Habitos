@@ -1,0 +1,42 @@
+/* [project]/frontend/styles/globals.css [client] (css) */
+.flex {
+  display: flex;
+}
+
+.h-full {
+  height: 100%;
+}
+
+.min-h-screen {
+  min-height: 100vh;
+}
+
+.w-2\/5, .w-\[40\%\] {
+  width: 40%;
+}
+
+.w-full {
+  width: 100%;
+}
+
+.flex-col {
+  flex-direction: column;
+}
+
+.items-center {
+  align-items: center;
+}
+
+.justify-between {
+  justify-content: space-between;
+}
+
+.overflow-hidden {
+  overflow: hidden;
+}
+
+.rounded-full {
+  border-radius: 3.40282e38px;
+}
+
+/*# sourceMappingURL=frontend_styles_globals_0b42ea6c.css.map*/
