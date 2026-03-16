@@ -1,6 +1,0 @@
-{
-  "version": 3,
-  "sources": [],
-  "sections": [
-    {"offset": {"line": 10, "column": 0}, "map": {"version":3,"sources":["file:///home/kaos/Documentos/Tecnico%20Desarrollo%20de%20Software/Quinto%20Trimestre/Programacion%20Avanzada/Proyecto%20FInal/Habitos_Proyecto_Final/frontend/pages/_app.js"],"sourcesContent":["import '../styles/globals.css'\n\nfunction MyApp({ Component, pageProps }) {\n  return <Component {...pageProps} />\n}\n\nexport default MyApp"],"names":[],"mappings":";;;;;;;AAEA,SAAS,MAAM,EAAE,SAAS,EAAE,SAAS,EAAE;IACrC,qBAAO,qKAAC;QAAW,GAAG,SAAS;;;;;;AACjC;uCAEe"}}]
-}

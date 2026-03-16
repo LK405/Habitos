@@ -1,6 +1,0 @@
-{
-  "version": 3,
-  "sources": [],
-  "sections": [
-    {"offset": {"line": 1, "column": 0}, "map": {"version":3,"sources":["file:///home/kaos/Documentos/Tecnico%20Desarrollo%20de%20Software/Quinto%20Trimestre/Programacion%20Avanzada/Proyecto%20FInal/Habitos_Proyecto_Final/frontend/styles/globals.css"],"sourcesContent":["/*! tailwindcss v4.2.1 | MIT License | https://tailwindcss.com */\n.flex {\n  display: flex;\n}\n.h-full {\n  height: 100%;\n}\n.min-h-screen {\n  min-height: 100vh;\n}\n.w-2\\/5 {\n  width: calc(2 / 5 * 100%);\n}\n.w-\\[40\\%\\] {\n  width: 40%;\n}\n.w-full {\n  width: 100%;\n}\n.flex-col {\n  flex-direction: column;\n}\n.items-center {\n  align-items: center;\n}\n.justify-between {\n  justify-content: space-between;\n}\n.overflow-hidden {\n  overflow: hidden;\n}\n.rounded-full {\n  border-radius: calc(infinity * 1px);\n}\n"],"names":[],"mappings":"AACA;;;;AAGA;;;;AAGA;;;;AAGA;;;;AAMA;;;;AAGA;;;;AAGA;;;;AAGA;;;;AAGA;;;;AAGA"}}]
-}

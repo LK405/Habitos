@@ -4,7 +4,7 @@ const mongoose = require('mongoose');
 const app = express();
 const PORT = 3000;
 
-// Conexion a MongoDB Atlas
+// mongo a atlas
 mongoose.connect('mongodb+srv://habitoUser:asdf1234asdf@habitoscluster.dxcppgb.mongodb.net/HabitosDB')
 .then(() => console.log('Conectado a MongoDB Atlas'))
 .catch(err => console.error('Error de conexion:', err));
