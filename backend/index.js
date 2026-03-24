@@ -1,26 +1,26 @@
 const express = require("express");
 const mongoose = require("mongoose");
-const userRoutes = require("./routes/userRoutes");
 const cors = require("cors");
+require("dotenv").config();
+
+const habitRoutes = require("./routes/habitRoutes");
+const userRoutes = require("./routes/userRoutes");
 
 const app = express();
-const PORT = 3001;
-const habitRoutes = require("./routes/habitRoutes");
+const PORT = process.env.PORT || 3001;
+
+app.use(cors({
+  origin: "http://localhost:3000",
+  credentials: true
+}));
 app.use(express.json());
-app.use(cors());
-app.use("/api", habitRoutes);
-app.use("/api", userRoutes);
 
-mongoose.connect("mongodb://localhost:27017/habitos")
-.then(() => console.log("mongodb conectado"))
-.catch(err => console.log(err));
+app.use("/", habitRoutes);
+app.use("/users", userRoutes);
 
-
-
-
-app.get("/api/test", (req, res) => {
-  res.json({ mensaje: "backend funcionando" });
-});
+mongoose.connect(process.env.MONGODB_URI)
+  .then(() => console.log("MongoDB conectado"))
+  .catch(err => console.log(err));
 
 app.listen(PORT, () => {
   console.log(`servidor corriendo en puerto ${PORT}`);

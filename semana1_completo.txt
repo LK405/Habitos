@@ -1,0 +1,201 @@
+===== ./models/Habitos.js =====
+const mongoose = require('mongoose');
+
+// Definir el esquema
+const habitoSchema = new mongoose.Schema({
+  nombre: { type: String, required: true },
+  descripcion: String,
+  fecha: { type: Date, default: Date.now }
+});
+
+// Crear el modelo
+const Habito = mongoose.model('Habito', habitoSchema);
+
+module.exports = Habito;
+
+===== ./README.md =====
+# Proyecto Final - Hábitos
+
+Este proyecto usa Node.js con Express y se conecta a una base de datos en MongoDB Atlas.
+
+Pasos realizados:
+- Se inicializó el proyecto con npm.
+- Se instaló Express y Mongoose.
+- Se creó un servidor básico en el puerto 3000.
+- Se configuró un cluster gratuito en MongoDB Atlas.
+- Se creó un usuario y se agregó la IP de acceso.
+- Se copió la cadena de conexión y se probó en el código.
+- Se verificó que el servidor se conecta correctamente a MongoDB Atlas.
+
+Resultado:
+El servidor Express funciona en http://localhost:3000 y está conectado a la base de datos en MongoDB Atlas. MongoDB Atlas:
+- Cree un cluster gratuito.
+- Agregué un usuario (`habitoUser`) con contraseña.
+- Permití el acceso desde mi IP.
+- Copié la cadena de conexión.
+
+- Conecté el servidor a MongoDB Atlas usando Mongoose:
+```js
+mongoose.connect('mongodb+srv://habitoUser:TU_PASSWORD@habitoscluster.dxcppgb.mongodb.net/HabitosDB')
+
+
+===== ./index.js =====
+const express = require('express');
+const mongoose = require('mongoose');
+
+const app = express();
+const PORT = 3000;
+
+// Conexion a MongoDB Atlas
+mongoose.connect('mongodb+srv://habitoUser:asdf1234asdf@habitoscluster.dxcppgb.mongodb.net/HabitosDB')
+.then(() => console.log('Conectado a MongoDB Atlas'))
+.catch(err => console.error('Error de conexion:', err));
+
+// Middleware para leer JSON
+app.use(express.json());
+
+// Definir esquema de habito
+const habitoSchema = new mongoose.Schema({
+  nombre: { type: String, required: true },
+  descripcion: String,
+  fecha: { type: Date, default: Date.now }
+});
+
+// Crear modelo de habito
+const Habito = mongoose.model('Habito', habitoSchema);
+
+// Endpoint POST para crear habito (alta)
+app.post('/habitos', async (req, res) => {
+  try {
+    const nuevoHabito = new Habito(req.body);
+    await nuevoHabito.save();
+    res.status(201).send(nuevoHabito);
+  } catch (err) {
+    res.status(400).send(err);
+  }
+});
+
+// Endpoint DELETE para eliminar habito por id (baja)
+app.delete('/habitos/:id', async (req, res) => {
+  try {
+    const habitoEliminado = await Habito.findByIdAndDelete(req.params.id);
+    if (!habitoEliminado) return res.status(404).send({ mensaje: 'Habito no encontrado' });
+    res.send({ mensaje: 'Habito eliminado', habitoEliminado });
+  } catch (err) {
+    res.status(400).send(err);
+  }
+});
+
+// Endpoint PUT para actualizar habito por id (cambio)
+app.put('/habitos/:id', async (req, res) => {
+  try {
+    const habitoActualizado = await Habito.findByIdAndUpdate(req.params.id, req.body, { new: true });
+    if (!habitoActualizado) return res.status(404).send({ mensaje: 'Habito no encontrado' });
+    res.send(habitoActualizado);
+  } catch (err) {
+    res.status(400).send(err);
+  }
+});
+
+// Ruta basica para probar servidor
+app.get('/', (req, res) => {
+  res.send('Servidor Express funcionando');
+});
+
+// Iniciar servidor
+app.listen(PORT, () => {
+  console.log(`Servidor corriendo en http://localhost:${PORT}`);
+});
+
+===== ./package.json =====
+{
+  "name": "habitos_proyecto_final",
+  "version": "1.0.0",
+  "description": "Repositorio para el proyecto de progra",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/LK405/Habitos.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/LK405/Habitos/issues"
+  },
+  "homepage": "https://github.com/LK405/Habitos#readme",
+  "dependencies": {
+    "express": "^5.2.1",
+    "mongoose": "^9.2.1"
+  }
+}
+
+===== ./backend/routes/authRoutes.js =====
+const express = require('express');
+const bcrypt = require('bcryptjs');
+const jwt = require('jsonwebtoken');
+const User = require('../models/User');
+
+const router = express.Router();
+ 
+router.post('/register', async (req, res) => {
+  try {
+    const { name, email, password } = req.body;
+
+    const existing = await User.findOne({ email });
+    if (existing) {
+      return res.status(400).json({ message: 'El correo ya está registrado' });
+    }
+
+    const hashed = await bcrypt.hash(password, 10);
+    const user = new User({ name, email, password: hashed });
+    await user.save();
+
+    const token = jwt.sign(
+      { userId: user._id },
+      process.env.JWT_SECRET,
+      { expiresIn: '7d' }
+    );
+
+    res.status(201).json({
+      token,
+      user: { id: user._id, name: user.name, email: user.email }
+    });
+  } catch (err) {
+    res.status(500).json({ message: 'Error al registrar', error: err.message });
+  }
+});
+ 
+router.post('/login', async (req, res) => {
+  try {
+    const { email, password } = req.body;
+
+    const user = await User.findOne({ email });
+    if (!user) {
+      return res.status(404).json({ message: 'Usuario no encontrado' });
+    }
+
+    const isMatch = await bcrypt.compare(password, user.password);
+    if (!isMatch) {
+      return res.status(401).json({ message: 'Contraseña incorrecta' });
+    }
+
+    const token = jwt.sign(
+      { userId: user._id },
+      process.env.JWT_SECRET,
+      { expiresIn: '7d' }
+    );
+
+    res.json({
+      token,
+      user: { id: user._id, name: user.name, email: user.email }
+    });
+  } catch (err) {
+    res.status(500).json({ message: 'Error al iniciar sesión', error: err.message });
+  }
+});
+
+module.exports = router;
