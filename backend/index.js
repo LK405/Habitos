@@ -10,7 +10,7 @@ const app = express();
 const PORT = process.env.PORT || 3001;
 
 app.use(cors({
-  origin: ["http://localhost:3000", "https://habitos-frontend.vercel.app"],
+  origin: ["http://localhost:3000", "https://habitos-frontend-zeta.vercel.app"],
   credentials: true
 }));
 app.use(express.json());
