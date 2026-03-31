@@ -1,6 +1,6 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 
-const BASE = "https://habitos-backend-y461.onrender.com";
+const BASE = "https://backend-five-kappa-47.vercel.app";
 
 export const fetchHabitsThunk = createAsyncThunk("habit/fetchHabits", async (token) => {
   const res = await fetch(`${BASE}/habits`, {
