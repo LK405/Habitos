@@ -15,13 +15,25 @@ app.use(cors({
 }));
 app.use(express.json());
 
+// Conexion optimizada para serverless
+let isConnected = false;
+const connectDB = async () => {
+  if (isConnected) return;
+  await mongoose.connect(process.env.MONGODB_URI);
+  isConnected = true;
+  console.log("MongoDB conectado");
+};
+
+app.use(async (req, res, next) => {
+  await connectDB();
+  next();
+});
+
 app.use("/", habitRoutes);
 app.use("/users", userRoutes);
-
-mongoose.connect(process.env.MONGODB_URI)
-  .then(() => console.log("MongoDB conectado"))
-  .catch(err => console.log(err));
 
 app.listen(PORT, () => {
   console.log(`servidor corriendo en puerto ${PORT}`);
 });
+
+module.exports = app;
