@@ -15,6 +15,10 @@ app.use(cors({
 }));
 app.use(express.json());
 
+app.get("/", (req, res) => {
+  res.json({ message: "API Hábitos funcionando ✅" });
+});
+
 // Conexion optimizada para serverless
 let isConnected = false;
 const connectDB = async () => {
